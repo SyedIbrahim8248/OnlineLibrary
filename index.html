@@ -1,0 +1,1794 @@
+Save this as **`index.html`** and open it in Chrome or VS Code Live Server.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Online Library Management System</title>
+
+<style>
+
+/* =========================
+   BASIC
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f1f5f9;
+    color:#1e293b;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    border-radius:7px;
+    padding:10px 15px;
+}
+
+input,select{
+    width:100%;
+    padding:11px;
+    margin:6px 0 12px;
+    border:1px solid #cbd5e1;
+    border-radius:7px;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#1d4ed8,#7c3aed);
+}
+
+.loginBox{
+    background:white;
+    width:380px;
+    max-width:90%;
+    padding:35px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.loginBox h1{
+    text-align:center;
+    margin-bottom:10px;
+    color:#1d4ed8;
+}
+
+.loginBox p{
+    text-align:center;
+    margin-bottom:25px;
+    color:#64748b;
+}
+
+.loginBtn{
+    width:100%;
+    background:#1d4ed8;
+    color:white;
+    font-size:16px;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+#app{
+    display:none;
+}
+
+header{
+    background:#1d4ed8;
+    color:white;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+header h1{
+    font-size:24px;
+}
+
+.logout{
+    background:#dc2626;
+    color:white;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+nav{
+    background:#172554;
+    padding:10px;
+    text-align:center;
+}
+
+nav button{
+    margin:4px;
+    background:white;
+    color:#172554;
+}
+
+nav button:hover{
+    background:#bfdbfe;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:25px auto;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.card{
+    background:white;
+    padding:22px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.card h2{
+    color:#1d4ed8;
+    margin-bottom:18px;
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.stat{
+    padding:22px;
+    border-radius:12px;
+    color:white;
+}
+
+.stat h3{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.blue{
+    background:#2563eb;
+}
+
+.green{
+    background:#16a34a;
+}
+
+.orange{
+    background:#ea580c;
+}
+
+.red{
+    background:#dc2626;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.formGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.formGroup label{
+    font-weight:bold;
+}
+
+.primary{
+    background:#2563eb;
+    color:white;
+}
+
+.success{
+    background:#16a34a;
+    color:white;
+}
+
+.warning{
+    background:#ea580c;
+    color:white;
+}
+
+.danger{
+    background:#dc2626;
+    color:white;
+}
+
+.dark{
+    background:#0f172a;
+    color:white;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.tableContainer{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    padding:12px;
+    border-bottom:1px solid #e2e8f0;
+    text-align:left;
+}
+
+th{
+    background:#eff6ff;
+    color:#1d4ed8;
+}
+
+.actionBtn{
+    margin:2px;
+    padding:7px 10px;
+    color:white;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search{
+    margin-bottom:15px;
+}
+
+
+/* =========================
+   BADGES
+========================= */
+
+.badge{
+    padding:5px 9px;
+    border-radius:15px;
+    font-size:12px;
+}
+
+.available{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.issued{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.returned{
+    background:#dbeafe;
+    color:#1e40af;
+}
+
+.overdue{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#64748b;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.darkMode{
+    background:#0f172a;
+    color:#e2e8f0;
+}
+
+body.darkMode .card{
+    background:#1e293b;
+}
+
+body.darkMode input,
+body.darkMode select{
+    background:#334155;
+    color:white;
+    border-color:#475569;
+}
+
+body.darkMode th{
+    background:#334155;
+    color:white;
+}
+
+body.darkMode td{
+    border-color:#475569;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    .dashboard{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .formGrid{
+        grid-template-columns:1fr;
+    }
+
+    header{
+        flex-direction:column;
+        gap:10px;
+        text-align:center;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    nav button{
+        width:45%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     LOGIN PAGE
+========================= -->
+
+<div id="loginPage">
+
+<div class="loginBox">
+
+<h1>📚 Library Login</h1>
+
+<p>Online Library Management System</p>
+
+<label>Username</label>
+
+<input
+type="text"
+id="username"
+placeholder="Enter username"
+>
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Enter password"
+>
+
+<button
+class="loginBtn"
+onclick="login()"
+>
+🔐 Login
+</button>
+
+<p style="margin-top:15px;">
+Demo Login: <b>admin / 1234</b>
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     MAIN APPLICATION
+========================= -->
+
+<div id="app">
+
+
+<header>
+
+<h1>📚 Online Library Management System</h1>
+
+<button
+class="logout"
+onclick="logout()"
+>
+🚪 Logout
+</button>
+
+</header>
+
+
+<nav>
+
+<button onclick="showSection('dashboard')">
+📊 Dashboard
+</button>
+
+<button onclick="showSection('books')">
+📚 Books
+</button>
+
+<button onclick="showSection('students')">
+👨‍🎓 Students
+</button>
+
+<button onclick="showSection('issue')">
+📖 Issue Book
+</button>
+
+<button onclick="showSection('records')">
+📋 Records
+</button>
+
+<button onclick="darkMode()">
+🌙 Dark
+</button>
+
+</nav>
+
+
+<div class="container">
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<div id="dashboard" class="section active">
+
+<div class="card">
+
+<h2>📊 Library Dashboard</h2>
+
+<div class="dashboard">
+
+<div class="stat blue">
+
+<h3 id="totalBooks">0</h3>
+
+<p>Total Books</p>
+
+</div>
+
+
+<div class="stat green">
+
+<h3 id="availableBooks">0</h3>
+
+<p>Available Books</p>
+
+</div>
+
+
+<div class="stat orange">
+
+<h3 id="issuedBooks">0</h3>
+
+<p>Issued Books</p>
+
+</div>
+
+
+<div class="stat red">
+
+<h3 id="totalStudents">0</h3>
+
+<p>Total Students</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>⚡ Quick Information</h2>
+
+<p>
+Welcome to the Online Library Management System.
+Use the navigation menu to manage books, students,
+book issues and returns.
+</p>
+
+<br>
+
+<button
+class="primary"
+onclick="showSection('books')"
+>
+📚 Manage Books
+</button>
+
+<button
+class="success"
+onclick="showSection('issue')"
+>
+📖 Issue Book
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     BOOK MANAGEMENT
+========================= -->
+
+<div id="books" class="section">
+
+<div class="card">
+
+<h2>📚 Add New Book</h2>
+
+<div class="formGrid">
+
+<div class="formGroup">
+
+<label>Book Title</label>
+
+<input
+type="text"
+id="bookTitle"
+placeholder="Enter book title"
+>
+
+</div>
+
+
+<div class="formGroup">
+
+<label>Author</label>
+
+<input
+type="text"
+id="bookAuthor"
+placeholder="Enter author"
+>
+
+</div>
+
+
+<div class="formGroup">
+
+<label>Category</label>
+
+<select id="bookCategory">
+
+<option>Programming</option>
+<option>Database</option>
+<option>Computer Science</option>
+<option>Mathematics</option>
+<option>English</option>
+<option>Science</option>
+<option>Novel</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+
+<div class="formGroup">
+
+<label>ISBN</label>
+
+<input
+type="text"
+id="bookISBN"
+placeholder="Enter ISBN"
+>
+
+</div>
+
+</div>
+
+<button
+class="primary"
+onclick="addBook()"
+>
+➕ Add Book
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>📖 Book List</h2>
+
+<input
+class="search"
+id="bookSearch"
+placeholder="🔎 Search books..."
+onkeyup="searchBooks()"
+>
+
+<div class="tableContainer">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Title</th>
+<th>Author</th>
+<th>Category</th>
+<th>ISBN</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="bookTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     STUDENTS
+========================= -->
+
+<div id="students" class="section">
+
+<div class="card">
+
+<h2>👨‍🎓 Register Student</h2>
+
+<div class="formGrid">
+
+<div>
+
+<label>Student Name</label>
+
+<input
+id="studentName"
+placeholder="Enter student name"
+>
+
+</div>
+
+
+<div>
+
+<label>Roll Number</label>
+
+<input
+id="studentRoll"
+placeholder="Enter roll number"
+>
+
+</div>
+
+
+<div>
+
+<label>Email</label>
+
+<input
+id="studentEmail"
+placeholder="Enter email"
+>
+
+</div>
+
+
+<div>
+
+<label>Course</label>
+
+<input
+id="studentCourse"
+placeholder="B.Tech CSE"
+>
+
+</div>
+
+</div>
+
+<button
+class="success"
+onclick="addStudent()"
+>
+➕ Register Student
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>👥 Student List</h2>
+
+<div class="tableContainer">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Roll No.</th>
+<th>Email</th>
+<th>Course</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="studentTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     ISSUE BOOK
+========================= -->
+
+<div id="issue" class="section">
+
+<div class="card">
+
+<h2>📖 Issue Book</h2>
+
+<label>Select Student</label>
+
+<select id="issueStudent"></select>
+
+<label>Select Book</label>
+
+<select id="issueBook"></select>
+
+<label>Issue Date</label>
+
+<input
+type="date"
+id="issueDate"
+>
+
+<label>Return Due Date</label>
+
+<input
+type="date"
+id="dueDate"
+>
+
+<button
+class="primary"
+onclick="issueBook()"
+>
+📖 Issue Book
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     RECORDS
+========================= -->
+
+<div id="records" class="section">
+
+<div class="card">
+
+<h2>📋 Issue / Return Records</h2>
+
+<button
+class="dark"
+onclick="window.print()"
+>
+🖨️ Print Report
+</button>
+
+<div class="tableContainer">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Student</th>
+<th>Book</th>
+<th>Issue Date</th>
+<th>Due Date</th>
+<th>Return Date</th>
+<th>Fine</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="recordTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<footer>
+
+Online Library Management System © 2026
+
+</footer>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================
+   DATABASE
+========================= */
+
+let books =
+JSON.parse(localStorage.getItem("libraryBooks")) || [
+
+{
+id:1,
+title:"Java Programming",
+author:"James Gosling",
+category:"Programming",
+isbn:"JAVA001",
+status:"Available"
+},
+
+{
+id:2,
+title:"HTML & CSS",
+author:"Jon Duckett",
+category:"Programming",
+isbn:"WEB001",
+status:"Available"
+},
+
+{
+id:3,
+title:"JavaScript",
+author:"David Flanagan",
+category:"Programming",
+isbn:"JS001",
+status:"Available"
+}
+
+];
+
+
+let students =
+JSON.parse(localStorage.getItem("libraryStudents")) || [
+
+{
+id:1,
+name:"Rahul Kumar",
+roll:"23CSE001",
+email:"rahul@example.com",
+course:"B.Tech CSE"
+}
+
+];
+
+
+let records =
+JSON.parse(localStorage.getItem("libraryRecords")) || [];
+
+
+/* =========================
+   SAVE DATABASE
+========================= */
+
+function saveData(){
+
+localStorage.setItem(
+"libraryBooks",
+JSON.stringify(books)
+);
+
+localStorage.setItem(
+"libraryStudents",
+JSON.stringify(students)
+);
+
+localStorage.setItem(
+"libraryRecords",
+JSON.stringify(records)
+);
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+function login(){
+
+let username =
+document.getElementById("username").value;
+
+let password =
+document.getElementById("password").value;
+
+
+if(username === "admin" && password === "1234"){
+
+document.getElementById("loginPage")
+.style.display="none";
+
+document.getElementById("app")
+.style.display="block";
+
+updateAll();
+
+}
+else{
+
+alert("Wrong username or password!");
+
+}
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+document.getElementById("app")
+.style.display="none";
+
+document.getElementById("loginPage")
+.style.display="flex";
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(id){
+
+document
+.querySelectorAll(".section")
+.forEach(section =>
+section.classList.remove("active")
+);
+
+document
+.getElementById(id)
+.classList.add("active");
+
+updateAll();
+
+}
+
+
+/* =========================
+   ADD BOOK
+========================= */
+
+function addBook(){
+
+let title =
+document.getElementById("bookTitle").value.trim();
+
+let author =
+document.getElementById("bookAuthor").value.trim();
+
+let category =
+document.getElementById("bookCategory").value;
+
+let isbn =
+document.getElementById("bookISBN").value.trim();
+
+
+if(!title || !author || !isbn){
+
+alert("Please fill all book details.");
+
+return;
+
+}
+
+
+let book={
+
+id:Date.now(),
+
+title:title,
+
+author:author,
+
+category:category,
+
+isbn:isbn,
+
+status:"Available"
+
+};
+
+
+books.push(book);
+
+saveData();
+
+alert("Book added successfully!");
+
+document.getElementById("bookTitle").value="";
+document.getElementById("bookAuthor").value="";
+document.getElementById("bookISBN").value="";
+
+updateAll();
+
+}
+
+
+/* =========================
+   DISPLAY BOOKS
+========================= */
+
+function displayBooks(list=books){
+
+let table =
+document.getElementById("bookTable");
+
+table.innerHTML="";
+
+
+list.forEach(book=>{
+
+let statusClass =
+book.status==="Available"
+? "available"
+: "issued";
+
+
+table.innerHTML += `
+
+<tr>
+
+<td>${book.id}</td>
+
+<td>${book.title}</td>
+
+<td>${book.author}</td>
+
+<td>${book.category}</td>
+
+<td>${book.isbn}</td>
+
+<td>
+<span class="badge ${statusClass}">
+${book.status}
+</span>
+</td>
+
+<td>
+
+<button
+class="actionBtn danger"
+onclick="deleteBook(${book.id})"
+>
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+/* =========================
+   SEARCH BOOKS
+========================= */
+
+function searchBooks(){
+
+let text =
+document.getElementById("bookSearch")
+.value.toLowerCase();
+
+
+let filtered =
+books.filter(book =>
+
+book.title.toLowerCase()
+.includes(text)
+
+||
+
+book.author.toLowerCase()
+.includes(text)
+
+||
+
+book.category.toLowerCase()
+.includes(text)
+
+);
+
+
+displayBooks(filtered);
+
+}
+
+
+/* =========================
+   DELETE BOOK
+========================= */
+
+function deleteBook(id){
+
+let book =
+books.find(b=>b.id===id);
+
+
+if(book.status==="Issued"){
+
+alert("Issued book cannot be deleted.");
+
+return;
+
+}
+
+
+if(confirm("Delete this book?")){
+
+books =
+books.filter(b=>b.id!==id);
+
+saveData();
+
+updateAll();
+
+}
+
+}
+
+
+/* =========================
+   ADD STUDENT
+========================= */
+
+function addStudent(){
+
+let name =
+document.getElementById("studentName")
+.value.trim();
+
+let roll =
+document.getElementById("studentRoll")
+.value.trim();
+
+let email =
+document.getElementById("studentEmail")
+.value.trim();
+
+let course =
+document.getElementById("studentCourse")
+.value.trim();
+
+
+if(!name || !roll || !email || !course){
+
+alert("Please fill all student details.");
+
+return;
+
+}
+
+
+let student={
+
+id:Date.now(),
+
+name:name,
+
+roll:roll,
+
+email:email,
+
+course:course
+
+};
+
+
+students.push(student);
+
+saveData();
+
+alert("Student registered!");
+
+document.getElementById("studentName").value="";
+document.getElementById("studentRoll").value="";
+document.getElementById("studentEmail").value="";
+document.getElementById("studentCourse").value="";
+
+updateAll();
+
+}
+
+
+/* =========================
+   DISPLAY STUDENTS
+========================= */
+
+function displayStudents(){
+
+let table =
+document.getElementById("studentTable");
+
+table.innerHTML="";
+
+
+students.forEach(student=>{
+
+table.innerHTML += `
+
+<tr>
+
+<td>${student.id}</td>
+
+<td>${student.name}</td>
+
+<td>${student.roll}</td>
+
+<td>${student.email}</td>
+
+<td>${student.course}</td>
+
+<td>
+
+<button
+class="actionBtn danger"
+onclick="deleteStudent(${student.id})"
+>
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+/* =========================
+   DELETE STUDENT
+========================= */
+
+function deleteStudent(id){
+
+let hasBook =
+records.some(
+r =>
+r.studentId===id &&
+r.status==="Issued"
+);
+
+
+if(hasBook){
+
+alert(
+"Student has an issued book. Return it first."
+);
+
+return;
+
+}
+
+
+if(confirm("Delete student?")){
+
+students =
+students.filter(s=>s.id!==id);
+
+saveData();
+
+updateAll();
+
+}
+
+}
+
+
+/* =========================
+   ISSUE FORM
+========================= */
+
+function loadIssueForm(){
+
+let studentSelect =
+document.getElementById("issueStudent");
+
+let bookSelect =
+document.getElementById("issueBook");
+
+
+studentSelect.innerHTML =
+'<option value="">Select Student</option>';
+
+bookSelect.innerHTML =
+'<option value="">Select Available Book</option>';
+
+
+students.forEach(student=>{
+
+studentSelect.innerHTML += `
+
+<option value="${student.id}">
+${student.name} - ${student.roll}
+</option>
+
+`;
+
+});
+
+
+books
+.filter(book=>book.status==="Available")
+.forEach(book=>{
+
+bookSelect.innerHTML += `
+
+<option value="${book.id}">
+${book.title}
+</option>
+
+`;
+
+});
+
+
+}
+
+
+/* =========================
+   ISSUE BOOK
+========================= */
+
+function issueBook(){
+
+let studentId =
+Number(
+document.getElementById("issueStudent").value
+);
+
+let bookId =
+Number(
+document.getElementById("issueBook").value
+);
+
+let issueDate =
+document.getElementById("issueDate").value;
+
+let dueDate =
+document.getElementById("dueDate").value;
+
+
+if(!studentId ||
+!bookId ||
+!issueDate ||
+!dueDate){
+
+alert("Please fill all details.");
+
+return;
+
+}
+
+
+if(new Date(dueDate) < new Date(issueDate)){
+
+alert("Due date cannot be before issue date.");
+
+return;
+
+}
+
+
+let book =
+books.find(b=>b.id===bookId);
+
+
+book.status="Issued";
+
+
+let record={
+
+id:Date.now(),
+
+studentId:studentId,
+
+bookId:bookId,
+
+issueDate:issueDate,
+
+dueDate:dueDate,
+
+returnDate:"",
+
+fine:0,
+
+status:"Issued"
+
+};
+
+
+records.push(record);
+
+saveData();
+
+alert("Book issued successfully!");
+
+updateAll();
+
+showSection("records");
+
+}
+
+
+/* =========================
+   RETURN BOOK
+========================= */
+
+function returnBook(id){
+
+let record =
+records.find(r=>r.id===id);
+
+
+let today =
+new Date();
+
+let due =
+new Date(record.dueDate);
+
+
+/*
+1 day = 86400000 ms
+Fine = ₹5 per day
+*/
+
+let lateDays =
+Math.max(
+0,
+Math.ceil(
+(today-due)/86400000
+)
+);
+
+
+let fine =
+lateDays*5;
+
+
+record.returnDate =
+today.toISOString()
+.split("T")[0];
+
+record.fine=fine;
+
+record.status="Returned";
+
+
+let book =
+books.find(
+b=>b.id===record.bookId
+);
+
+
+if(book){
+
+book.status="Available";
+
+}
+
+
+saveData();
+
+alert(
+"Book returned!\nFine: ₹"+fine
+);
+
+updateAll();
+
+}
+
+
+/* =========================
+   DISPLAY RECORDS
+========================= */
+
+function displayRecords(){
+
+let table =
+document.getElementById("recordTable");
+
+table.innerHTML="";
+
+
+records.forEach(record=>{
+
+let student =
+students.find(
+s=>s.id===record.studentId
+);
+
+let book =
+books.find(
+b=>b.id===record.bookId
+);
+
+
+let statusClass =
+record.status==="Issued"
+? "issued"
+: "returned";
+
+
+let action="";
+
+
+if(record.status==="Issued"){
+
+action=`
+
+<button
+class="actionBtn success"
+onclick="returnBook(${record.id})"
+>
+Return
+</button>
+
+`;
+
+}
+else{
+
+action="Completed";
+
+}
+
+
+table.innerHTML += `
+
+<tr>
+
+<td>${record.id}</td>
+
+<td>${student ? student.name : "Unknown"}</td>
+
+<td>${book ? book.title : "Unknown"}</td>
+
+<td>${record.issueDate}</td>
+
+<td>${record.dueDate}</td>
+
+<td>${record.returnDate || "-"}</td>
+
+<td>₹${record.fine}</td>
+
+<td>
+
+<span class="badge ${statusClass}">
+${record.status}
+</span>
+
+</td>
+
+<td>${action}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard(){
+
+document.getElementById("totalBooks")
+.innerText=books.length;
+
+
+document.getElementById("availableBooks")
+.innerText=
+books.filter(
+b=>b.status==="Available"
+).length;
+
+
+document.getElementById("issuedBooks")
+.innerText=
+books.filter(
+b=>b.status==="Issued"
+).length;
+
+
+document.getElementById("totalStudents")
+.innerText=
+students.length;
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function darkMode(){
+
+document.body
+.classList.toggle("darkMode");
+
+}
+
+
+/* =========================
+   UPDATE EVERYTHING
+========================= */
+
+function updateAll(){
+
+saveData();
+
+displayBooks();
+
+displayStudents();
+
+displayRecords();
+
+loadIssueForm();
+
+updateDashboard();
+
+}
+
+
+/* =========================
+   SET DEFAULT DATE
+========================= */
+
+let today =
+new Date()
+.toISOString()
+.split("T")[0];
+
+document.getElementById("issueDate")
+.value=today;
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+updateAll();
+
+</script>
+
+</body>
+</html>
+```
